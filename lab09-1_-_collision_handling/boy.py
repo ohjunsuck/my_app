@@ -42,10 +42,14 @@ class Boy:
 
 
     def draw(self):
+        draw_rectangle(*self.get_bb())
+        self.image.clip_draw(self.frame * 100, self.state * 100, 100, 100, self.x, self.y)
+    def draw_bb(self):
+        draw_rectangle(*self.get_bb())
         self.image.clip_draw(self.frame * 100, self.state * 100, 100, 100, self.x, self.y)
 
     def get_bb(self):
-        pass
+        return self.x -50, self.y -50, self.x +50, self.y+50
 
     def handle_event(self, event):
         if (event.type, event.key) == (SDL_KEYDOWN, SDLK_LEFT):
