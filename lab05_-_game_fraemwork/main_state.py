@@ -16,12 +16,10 @@ grass = None
 font = None
 jombie = None
 
-
-
 class Grass:
     def __init__(self):
-        self.gumex, self.gumey, self.gumesize = 310,565,0
-        self.changstate=0
+        self.gumex, self.gumey, self.gumesize   =   310,565,0
+        self.changestate=0
         self.plantx=[130,190,250,310,370,430,620,730]
         self.planty=[565,565,565,565,565,565,565,580]
         self.plantsize=[0,0,0,0,0,0,0,0]
@@ -38,7 +36,6 @@ class Grass:
         self.erase = load_image('파괴아이콘.png')
         self.menu = load_image('메뉴창.png')
         self.jumsu = load_image('숫자.png')
-
 
     def draw(self):
         global i,j
@@ -85,16 +82,13 @@ class Grass:
 
     def update(self):
         global x, y
+
         events = get_events()
         for event in events:
-         if event.type == SDL_MOUSEMOTION:
-              x, y =event.x, 600 - event.y
+            if event.type == SDL_MOUSEMOTION:
+                x,y = event.x, 600- event.y
 
-
-            # for i in range(0,9):
-              #  for j in range(0,5):
-              #   self.plantspace.draw(60+80*(i),80+100*(j))
-        for i in range(1,8):
+            for i in range(1,8):
              if( event.type == SDL_MOUSEBUTTONDOWN and self.state==i):
                 self.click=i
                 for i in range(-1,9):
@@ -102,28 +96,16 @@ class Grass:
                          if((40+80*i<x and x<100+80*(i) ) and (100*j-40<y and 40+100*(j+1)>y)):
                              self.savex[i]=80*(i+1)
                              self.savey[j]=(j+1)*100
-        print(x)
 
+            for i in range(0,8):
+                if(x>self.plantx[i]-25 and x<self.plantx[i]+25 and y>self.planty[i]-25 and y<self.planty[i]+25):
+                    self.state=i+1
 
-        for i in range(0,8):
-            if(x>self.plantx[i]-25 and x<self.plantx[i]+25 and y>self.planty[i]-25 and y<self.planty[i]+25):
-              self.state=i+1
-
-
-
-        for i in range(0,8):
-            if(self.plantsize[i]<10and self.state==i+1):
-               self.plantsize[i]+=10
-            elif(self.plantsize[i]>0 and self.state!=i+1):
-                self.plantsize[i]-=10
-
-
-
-
-
-
-
-
+            for i in range(0,8):
+                if(self.plantsize[i]<10and self.state==i+1):
+                    self.plantsize[i]+=10
+                elif(self.plantsize[i]>0 and self.state!=i+1):
+                    self.plantsize[i]-=10
 
 
 
