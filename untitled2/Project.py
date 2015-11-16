@@ -4,151 +4,30 @@ import json
 
 running = True
 score = 0
-time =10
-turn =0
 Object_List = []
 
 # Object Type
 BALANCE, ATTACK, DEFENSE, ITEM = 0, 1, 2, 3
 
 class BackGround:
-    PIXEL_PER_METER = (10.0 / 0.3)           # 10 pixel 30 cm
-    SCROLL_SPEED_KMPH = 20.0                    # Km / Hour
-    SCROLL_SPEED_MPM = (SCROLL_SPEED_KMPH * 1000.0 / 60.0)
-    SCROLL_SPEED_MPS = (SCROLL_SPEED_MPM / 60.0)
-    SCROLL_SPEED_PPS = (SCROLL_SPEED_MPS * PIXEL_PER_METER)
-
-    def __init__(self, w, h):
+    def __init__(self):
         self.image = load_image('BackGround.png')
         self.image1 = load_image('구매창.png')
-        self.speed = 0
-        self.left = 0
-        self.screen_width = w
-        self.screen_height = h
-
 
     def draw(self):
-
-        x= int(self.left)
-        w= min(self.image.w - x, self.screen_width)
-
-
-        #self.image.clip_draw_to_origin(x,0,w,self.screen_height,0,0)
-        #self.image.clip_draw_to_origin(0,0,self.screen_width-w, self.screen_height,w,0)
-        self.image.draw(640-self.left, 320)
-        self.image.draw(-660-self.left, 320)
+        self.image.draw(640, 320)
         self.image1.draw(550,605)
-
-    def update(self):
-        #self.left-=1
-
-        pass
-
-
 
     def First(self):
         self.image = load_image('BackGround.png')
 
 class User_Interface:
     def __init__(self):
-        self.gume = load_image('구매식물.png')
         self.Num_image = load_image('Number.png')
-        self.Num_image1 = load_image('Number1.png')
-        self.Num_image2 = load_image('Time_Slot.png')
-        self.OverTime = load_image('Number2.png')
-        self.Slot = load_image('Slot.png')
-        self.Out_Slot = load_image('Out_Slot.png')
         self.num_place = 0
-        self.num_place1 = 0
-        self.num_place2 = 0
-        self.num_place3 = 0
-        self.num_place4 = 0
-        self.plantx=[210,270,330,390,620,470]
-        self.planty=[600,600,600,600,600,600,600,600,600]
-        self.plantsize=[0,0,0,0,0,0,0,0]
+
     def draw_Ammo(self, aim):
 # 1280, 640
-        self.gume.clip_draw(0, 250, 50,50,self.plantx[0], self.planty[0]+self.plantsize[0])
-        self.gume.clip_draw(50, 250, 50,50,self.plantx[1], self.planty[1]+self.plantsize[1])
-        self.gume.clip_draw(250,250, 50,50,self.plantx[2], self.planty[2]+self.plantsize[2])
-        self.gume.clip_draw(300, 250, 50,50,self.plantx[3], self.planty[3]+self.plantsize[3])
-        self.gume.clip_draw(0, 0, 50,50,self.plantx[4], self.planty[4]+self.plantsize[4])
-        self.gume.clip_draw(0, 200, 50,50,self.plantx[5], self.planty[5]+self.plantsize[5])
-
-
-        self.Slot.draw(1010,600)
-        self.Out_Slot.draw(590,600)
-        self.Num_image2.draw(1190,600)
-        if time%10 == 0:
-            self.num_place1 = 0
-        elif time%10 == 1:
-            self.num_place1 = 1
-        elif time%10 == 2:
-            self.num_place1 = 2
-        elif time%10 == 3:
-            self.num_place1 = 3
-        elif time%10 == 4:
-            self.num_place1 = 4
-        elif time%10 == 5:
-            self.num_place1 = 5
-        elif time%10 == 6:
-            self.num_place1 = 6
-        elif time%10 == 7:
-            self.num_place1 = 7
-        elif time%10 == 8:
-            self.num_place1 = 8
-        elif time%10 == 9:
-            self.num_place1 = 9
-        self.OverTime.clip_draw(self.num_place1 * 32, 0, 32, 40, 1150, 600)
-        self.OverTime.clip_draw(self.num_place1 * 32, 0, 32, 40, 1200, 600)
-        self.OverTime.clip_draw(self.num_place1 * 32, 0, 32, 40, 1230, 600)
-
-        if score%10 == 0:
-            self.num_place1 = 0
-        elif score%10 == 1:
-            self.num_place1 = 1
-        elif score%10 == 2:
-            self.num_place1 = 2
-        elif score%10 == 3:
-            self.num_place1 = 3
-        elif score%10 == 4:
-            self.num_place1 = 4
-        elif score%10 == 5:
-            self.num_place1 = 5
-        elif score%10 == 6:
-            self.num_place1 = 6
-        elif score%10 == 7:
-            self.num_place1 = 7
-        elif score%10 == 8:
-            self.num_place1 = 8
-        elif score%10 == 9:
-            self.num_place1 = 9
-        self.Num_image1.clip_draw(self.num_place1 * 32, 0, 32, 40, 120, 570)
-
-        #ten's place
-        if score>=10:
-            if score%100 >= 0 and score%100 <= 9:
-                self.num_place1 = 0
-            elif score%100 >= 10 and score%100 <= 19:
-                self.num_place1 = 1
-            elif score%100 >= 20 and score%100 <= 29:
-                self.num_place1 = 2
-            elif score%100 >= 30 and score%100 <= 39:
-                self.num_place1 = 3
-            elif score%100 >= 40 and score%100 <= 49:
-                self.num_place1 = 4
-            elif score%100 >= 50 and score%100 <= 59:
-                self.num_place1 = 5
-            elif score%100 >= 60 and score%100 <= 69:
-                self.num_place1 = 6
-            elif score%100 >= 70 and score%100 <= 79:
-                self.num_place1 = 7
-            elif score%100 >= 80 and score%100 <= 89:
-                self.num_place1 = 8
-            elif score%100 >= 90 and score%100 <= 99:
-                self.num_place1 = 9
-            self.Num_image1.clip_draw(self.num_place1 * 32, 0, 32, 40, 82, 570)
-
 
         #unit's place
         if aim.Ammo%10 == 0:
@@ -171,7 +50,7 @@ class User_Interface:
             self.num_place = 8
         elif aim.Ammo%10 == 9:
             self.num_place = 9
-        self.Num_image.clip_draw(self.num_place * 64, 0, 64, 96, 1220, 500)
+        self.Num_image.clip_draw(self.num_place * 64, 0, 64, 96, 1220, 570)
 
         #ten's place
         if aim.Ammo>=10:
@@ -195,7 +74,7 @@ class User_Interface:
                 self.num_place = 8
             elif aim.Ammo%100 >= 90 and aim.Ammo%100 <= 99:
                 self.num_place = 9
-            self.Num_image.clip_draw(self.num_place * 64, 0, 64, 96, 1162, 500)
+            self.Num_image.clip_draw(self.num_place * 64, 0, 64, 96, 1162, 570)
 
     def draw(self, aim):
         self.draw_Ammo(aim)
@@ -251,32 +130,19 @@ class Aim:
 class Barricade:
     Wallx = 300
     Wally = 390
-    HP=25000
-    First_HP=HP
-    global turn
+    HP = 2500
 
     def __init__(self):
         self.image = load_image('tree01.png')
-        self.image1 = load_image('tree1.png')
-        self.image2 = load_image('tree2.png')
-        self.image3 = load_image('tree3.png')
-        self.image4 = load_image('tree4.png')
-        self.HP_image = load_image('HP.png')
-
 
     def update(self):
         global running
-        if(Barricade.HP<0):
-            turn=1
-            Barricade.Hp=25000
-
 
         #if self.HP < 0:
             #running = False
 
     def draw(self):
         self.image.clip_draw( 0, 0, 100, 150, 150, 150)
-        self.HP_image.clip_draw( (round( (Barricade.HP / Barricade.First_HP * 5) ) ) * 48, 0, 48, 6, 150, 250)
 
 
 class Item:
@@ -329,10 +195,10 @@ class Balance_Enemy: # Slime
 
     def Move(self):
         if self.Timer%10 == 0:
-            self.frame = (self.frame+1)%4
+            self.frame = (self.frame+1)%8
 
         if self.Timer == 20:
-            self.x = self.x-250
+            self.x = self.x-50
             self.Timer = 0
             if self.x <= (Barricade.Wallx - ( (Barricade.Wally - self.y) / 5.5 ) ):
                 self.frame = 0
@@ -342,10 +208,11 @@ class Balance_Enemy: # Slime
         self.Timer += 1
 
     def Attack(self):
-        Barricade.HP -= self.ATK
         if ( self.frame != 0 ) and ( self.Timer % 5 == 0 ):
             self.frame = (self.frame+1) % 4
-        elif self.Timer % 250 == 0:
+            if self.frame == 2:
+                Barricade.HP -= self.ATK
+        elif self.Timer % 200 == 0:
             self.Timer = 0
             self.frame = (self.frame+1) % 4
 
@@ -354,15 +221,13 @@ class Balance_Enemy: # Slime
 
     def Die(self):
         global Object_List
-        global score
 
         if self.frame == 4:
             Delete_Object_in_List(Object_List, self.myindex)
-            score+=1
         elif self.Timer % 3 == 0:
             self.frame += 1
-        self.Timer+=1
 
+        self.Timer+=1
 
     handle_state = {
         MOVE : Move,
@@ -540,7 +405,7 @@ class Create_Enemy_Timer():
             self.Decrease_Timer_Balance()
 
     def Create_Balance_Enemy(self, List):
-        if self.Balance_Enemy_Timer == 100 - self.B_E_Decrease_Time:
+        if self.Balance_Enemy_Timer == 1000 - self.B_E_Decrease_Time:
             Create_Object(BALANCE)
             self.Balance_Enemy_Timer = 0
         self.Balance_Enemy_Timer+=1
@@ -562,9 +427,8 @@ def main():
     open_canvas(1280, 640)
     global running
     global score
-    global time
 
-    bg = BackGround(1300,650)
+    bg = BackGround()
     barricade = Barricade()
     aim = Aim()
     UI = User_Interface()
@@ -577,7 +441,6 @@ def main():
     running=True
 
     while(running):
-        time+=1
         handle_events(aim, Object_List)
         clear_canvas()
 
@@ -593,7 +456,6 @@ def main():
             Object.update()
 
         aim.update()
-        bg.update()
         barricade.update()
         create_enemy_timer.update(Object_List)
         delay(0.01)

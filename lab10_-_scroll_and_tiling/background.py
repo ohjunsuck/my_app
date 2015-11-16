@@ -21,12 +21,11 @@ class Background:
     def draw(self):
         x= int(self.left)
         w= min(self.image.w - x, self.screen_width)
-        y= int(self.left)
-        h= min(self.image.h-y, self.screen_height)
 
-        #self.image.clip_draw_to_origin(x,0,w,self.screen_height,0,0)
-        #self.image.clip_draw_to_origin(0,0,self.screen_width-w, self.screen_height,w,0)
-        self.image.clip_draw_to_origin(0,x,w,self.screen_width,0,0)
+
+        self.image.clip_draw_to_origin(x,0,w,self.screen_height,0,0)
+        self.image.clip_draw_to_origin(0,0,self.screen_width-w, self.screen_height,w,0)
+        #self.image.clip_draw_to_origin(0,x,w,self.screen_width,0,0)
         #self.image.clip_draw_to_origin(0,0,self.screen_width, self.screen_height-w,w,0)
 
     def update(self, frame_time):
