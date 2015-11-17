@@ -1,6 +1,8 @@
 from pico2d import *
 import random
 import json
+import game_framework
+import title_state
 
 running = True
 score = 0
@@ -10,6 +12,12 @@ Object_List = []
 
 # Object Type
 BALANCE, ATTACK, DEFENSE, ITEM = 0, 1, 2, 3
+class StartMenu:
+    def __init__(self , w, h):
+        pass
+        #self.image = load_image('./resouce/타이틀.png')
+    def draw(self):
+        self.image.draw(640,320)
 
 class BackGround:
     PIXEL_PER_METER = (10.0 / 0.3)           # 10 pixel 30 cm
@@ -283,9 +291,6 @@ class Barricade:
     def update(self):
         global running
         global stage
-
-
-
         if(self.time<20):
             if(Barricade.HP>0):
                 self.image.clip_draw( 0, 0, 100, 150, 150, 150)
@@ -324,7 +329,7 @@ class Barricade:
                     if(self.time3<20):
                         if(stage==3):
                             if(Barricade.HP3>0):
-                                self.image3.clip_draw( 0, 0, 100, 150, 150, 150)
+                                self.image3.clip_draw( 0, 0, 100, 250, 130, 180)
                             else:
                                 self.time3+=1
                                 self.frame+=1
@@ -336,11 +341,11 @@ class Barricade:
                         if(self.time4<20):
                             if(stage==4):
                                 if(Barricade.HP4>0):
-                                    self.image4.clip_draw( 0, 0, 100, 150, 150, 150)
+                                    self.image4.clip_draw( 0, 0, 150, 350, 120, 230)
                                 else:
                                     self.time4+=1
                                     self.frame+=1
-                                    self.explosion.clip_draw(self.frame * 100, 350, 100, 300, 150,150)
+                                    self.explosion.clip_draw(self.frame * 100, 255, 100, 100, 150,150)
                                     if(self.frame>4):
                                         self.frame=0
 
@@ -423,7 +428,7 @@ class Balance_Enemy: # Slime
             self.frame = (self.frame+1)%4
 
         if self.Timer == 20:
-            self.x = self.x-250
+            self.x = self.x-25
             self.Timer = 0
             if self.x <= (Barricade.Wallx - ( (Barricade.Wally - self.y) / 5.5 ) ):
                 self.frame = 0
@@ -439,6 +444,14 @@ class Balance_Enemy: # Slime
             Barricade.HP -= self.ATK
             if(stage==1):
                 Barricade.HP1 -= self.ATK
+            elif(stage==2):
+                Barricade.HP2 -= self.ATK
+            elif(stage==3):
+                Barricade.HP3 -= self.ATK
+            elif(stage==4):
+                Barricade.HP4 -= self.ATK
+
+
         elif self.Timer % 250 == 0:
             self.Timer = 0
             self.frame = (self.frame+1) % 4
@@ -659,12 +672,14 @@ class Create_Enemy_Timer():
         self.Create_Enemy(List)
         self.Decrease_Create_Timer()
 
+
 def main():
     open_canvas(1280, 640)
     global running
     global score
     global time
 
+    start= StartMenu(1300,650)
     bg = BackGround(1300,650)
     barricade = Barricade()
     aim = Aim()
