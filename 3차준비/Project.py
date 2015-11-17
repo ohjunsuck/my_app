@@ -5,7 +5,7 @@ import json
 running = True
 score = 0
 time =10
-turn =0
+stage=0
 Object_List = []
 
 # Object Type
@@ -17,10 +17,11 @@ class BackGround:
     SCROLL_SPEED_MPM = (SCROLL_SPEED_KMPH * 1000.0 / 60.0)
     SCROLL_SPEED_MPS = (SCROLL_SPEED_MPM / 60.0)
     SCROLL_SPEED_PPS = (SCROLL_SPEED_MPS * PIXEL_PER_METER)
+    move=0
 
     def __init__(self, w, h):
-        self.image = load_image('BackGround.png')
-        self.image1 = load_image('구매창.png')
+        self.image = load_image('./resource/BackGround.png')
+        self.image1 = load_image('./resource/구매창.png')
         self.speed = 0
         self.left = 0
         self.screen_width = w
@@ -40,24 +41,23 @@ class BackGround:
         self.image1.draw(550,605)
 
     def update(self):
-        #self.left-=1
-
+        global turn
         pass
 
 
 
     def First(self):
-        self.image = load_image('BackGround.png')
+        self.image = load_image('./resource/BackGround.png')
 
 class User_Interface:
     def __init__(self):
-        self.gume = load_image('구매식물.png')
-        self.Num_image = load_image('Number.png')
-        self.Num_image1 = load_image('Number1.png')
-        self.Num_image2 = load_image('Time_Slot.png')
-        self.OverTime = load_image('Number2.png')
-        self.Slot = load_image('Slot.png')
-        self.Out_Slot = load_image('Out_Slot.png')
+        self.gume = load_image('./resource/구매식물.png')
+        self.Num_image = load_image('./resource/Number.png')
+        self.Num_image1 = load_image('./resource/Number1.png')
+        self.Num_image2 = load_image('./resource/Time_Slot.png')
+        self.OverTime = load_image('./resource/Number2.png')
+        self.Slot = load_image('./resource/Slot.png')
+        self.Out_Slot = load_image('./resource/Out_Slot.png')
         self.num_place = 0
         self.num_place1 = 0
         self.num_place2 = 0
@@ -203,7 +203,7 @@ class Aim:
     HAND_GUN, MACHINE_GUN, SHOT_GUN = 0, 1, 2
 
     def __init__(self):
-        self.image = load_image('Pointer.png')
+        self.image = load_image('./resource/Pointer.png')
         self.x = -100
         self.y = -100
         self.ATK = 50
@@ -251,32 +251,122 @@ class Aim:
 class Barricade:
     Wallx = 300
     Wally = 390
-    HP=25000
+    HP=25
+    HP1=50
+    HP2=75
+    HP3=100
+    HP4=125
     First_HP=HP
-    global turn
+    First_HP1=HP1
+    First_HP2=HP2
+    First_HP3=HP3
+    First_HP4=HP4
 
     def __init__(self):
-        self.image = load_image('tree01.png')
-        self.image1 = load_image('tree1.png')
-        self.image2 = load_image('tree2.png')
-        self.image3 = load_image('tree3.png')
-        self.image4 = load_image('tree4.png')
-        self.HP_image = load_image('HP.png')
+        self.image = load_image('./resource/tree01.png')
+        self.image1 = load_image('./resource/tree1.png')
+        self.image2 = load_image('./resource/tree2.png')
+        self.image3 = load_image('./resource/tree3.png')
+        self.image4 = load_image('./resource/tree4.png')
+        self.HP_image = load_image('./resource/HP.png')
+        self.explosion = load_image('./resource/Explosion.png')
+        self.frame=0
+        self.time=0
+        self.time1=0
+        self.time2=0
+        self.time3=0
+        self.time4=0
+
+        self.stage=0
 
 
     def update(self):
         global running
-        if(Barricade.HP<0):
-            turn=1
-            Barricade.Hp=25000
+        global stage
+
+
+
+        if(self.time<20):
+            if(Barricade.HP>0):
+                self.image.clip_draw( 0, 0, 100, 150, 150, 150)
+            else:
+                self.time+=1
+                self.frame+=1
+                self.explosion.clip_draw(self.frame * 100, 350, 100, 300, 150,150)
+                if(self.frame>4):
+                    self.frame=0
+        else:
+            stage=1
+            if(self.time1<20):
+                if(stage==1):
+                    if(Barricade.HP1>0):
+                        self.image1.clip_draw( 0, 0, 100, 150, 150, 150)
+                    else:
+                        self.time1+=1
+                        self.frame+=1
+                        self.explosion.clip_draw(self.frame * 100, 350, 100, 300, 150,150)
+                        if(self.frame>4):
+                            self.frame=0
+            else:
+                stage=2
+                if(self.time2<20):
+                    if(stage==2):
+                        if(Barricade.HP2>0):
+                            self.image2.clip_draw( 0, 0, 100, 150, 150, 150)
+                        else:
+                            self.time2+=1
+                            self.frame+=1
+                            self.explosion.clip_draw(self.frame * 100, 350, 100, 300, 150,150)
+                            if(self.frame>4):
+                                self.frame=0
+                else:
+                    stage=3
+                    if(self.time3<20):
+                        if(stage==3):
+                            if(Barricade.HP3>0):
+                                self.image3.clip_draw( 0, 0, 100, 150, 150, 150)
+                            else:
+                                self.time3+=1
+                                self.frame+=1
+                                self.explosion.clip_draw(self.frame * 100, 350, 100, 300, 150,150)
+                                if(self.frame>4):
+                                    self.frame=0
+                    else:
+                        stage=4
+                        if(self.time4<20):
+                            if(stage==4):
+                                if(Barricade.HP4>0):
+                                    self.image4.clip_draw( 0, 0, 100, 150, 150, 150)
+                                else:
+                                    self.time4+=1
+                                    self.frame+=1
+                                    self.explosion.clip_draw(self.frame * 100, 350, 100, 300, 150,150)
+                                    if(self.frame>4):
+                                        self.frame=0
+
+
+
+
+    def die(self):
+        pass
 
 
         #if self.HP < 0:
             #running = False
 
     def draw(self):
-        self.image.clip_draw( 0, 0, 100, 150, 150, 150)
         self.HP_image.clip_draw( (round( (Barricade.HP / Barricade.First_HP * 5) ) ) * 48, 0, 48, 6, 150, 250)
+        if(stage==1):
+            self.HP_image.clip_draw( (round( (Barricade.HP1 / Barricade.First_HP1 * 5) ) ) * 48, 0, 48, 6, 150, 250)
+        elif(stage==2):
+            self.HP_image.clip_draw( (round( (Barricade.HP2 / Barricade.First_HP2 * 5) ) ) * 48, 0, 48, 6, 150, 250)
+        elif(stage==3):
+            self.HP_image.clip_draw( (round( (Barricade.HP3 / Barricade.First_HP3 * 5) ) ) * 48, 0, 48, 6, 150, 250)
+        elif(stage==4):
+            self.HP_image.clip_draw( (round( (Barricade.HP4 / Barricade.First_HP4 * 5) ) ) * 48, 0, 48, 6, 150, 250)
+
+
+
 
 
 class Item:
@@ -285,7 +375,7 @@ class Item:
 
     def __init__(self):
         if Item.image == None:
-            Item.image = load_image('Item.png')
+            Item.image = load_image('./resource/Item.png')
         self.x = 1360
         self.y = random.randint(50, 250)
         self.frame = 0
@@ -314,9 +404,9 @@ class Balance_Enemy: # Slime
 
     def __init__(self):
         if Balance_Enemy.image == None:
-            Balance_Enemy.image = load_image('좀비1.png')
+            Balance_Enemy.image = load_image('./resource/좀비1.png')
         if Balance_Enemy.HP_image == None:
-            Balance_Enemy.HP_image = load_image('HP.png')
+            Balance_Enemy.HP_image = load_image('./resource/HP.png')
         self.x = random.randint(1350, 1400)
         self.y = random.randint(40, 250)
         self.HP = 250 + Balance_Enemy.HP_Upgrade
@@ -328,6 +418,7 @@ class Balance_Enemy: # Slime
         self.ATK = 10 + Balance_Enemy.ATK_Upgrade
 
     def Move(self):
+        global turn
         if self.Timer%10 == 0:
             self.frame = (self.frame+1)%4
 
@@ -339,15 +430,19 @@ class Balance_Enemy: # Slime
                 self.state = self.ATTACK
                 self.Timer = 0
 
+
         self.Timer += 1
 
     def Attack(self):
-        Barricade.HP -= self.ATK
         if ( self.frame != 0 ) and ( self.Timer % 5 == 0 ):
             self.frame = (self.frame+1) % 4
+            Barricade.HP -= self.ATK
+            if(stage==1):
+                Barricade.HP1 -= self.ATK
         elif self.Timer % 250 == 0:
             self.Timer = 0
             self.frame = (self.frame+1) % 4
+
 
 
         self.Timer += 1
@@ -388,7 +483,7 @@ class Attack_Enemy: # Snake
 
     def __init__(self):
         if Attack_Enemy.image == None:
-            Attack_Enemy.image = load_image('LEnemy-Attack.png')
+            Attack_Enemy.image = load_image('./resource/LEnemy-Attack.png')
         self.x = 1360
         self.y = random.randint(40, 250)
         self.HP = 100 + Attack_Enemy.Upgrade
@@ -423,7 +518,7 @@ class Defense_Enemy: # Golem
 
     def __init__(self):
         if Defense_Enemy.image == None:
-            Defense_Enemy.image = load_image('LEnemy-Defense.png')
+            Defense_Enemy.image = load_image('./resource/LEnemy-Defense.png')
         self.x = 1360
         self.y = random.randint(40, 250)
         self.HP = 500 + Defense_Enemy.Upgrade
@@ -544,6 +639,12 @@ class Create_Enemy_Timer():
             Create_Object(BALANCE)
             self.Balance_Enemy_Timer = 0
         self.Balance_Enemy_Timer+=1
+
+    def Create_Baricade(self, List):
+        if self.Barricade_Timer == 100 - self.B_E_Decrease_Time:
+            Create_Object(Barricade)
+            self.Barricade_Timer = 0
+        self.Barricade_Timer+=1
 
     def Decrease_Timer_Balance(self):
         if self.B_E_Decrease_Timer == 10000:
