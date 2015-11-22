@@ -83,29 +83,6 @@ class Grass:
     def update(self):
         global x, y
 
-        events = get_events()
-        for event in events:
-            if event.type == SDL_MOUSEMOTION:
-                x,y = event.x, 600- event.y
-
-            for i in range(1,8):
-             if( event.type == SDL_MOUSEBUTTONDOWN and self.state==i):
-                self.click=i
-                for i in range(-1,9):
-                    for j in range(0,5):
-                         if((40+80*i<x and x<100+80*(i) ) and (100*j-40<y and 40+100*(j+1)>y)):
-                             self.savex[i]=80*(i+1)
-                             self.savey[j]=(j+1)*100
-
-            for i in range(0,8):
-                if(x>self.plantx[i]-25 and x<self.plantx[i]+25 and y>self.planty[i]-25 and y<self.planty[i]+25):
-                    self.state=i+1
-
-            for i in range(0,8):
-                if(self.plantsize[i]<10and self.state==i+1):
-                    self.plantsize[i]+=10
-                elif(self.plantsize[i]>0 and self.state!=i+1):
-                    self.plantsize[i]-=10
 
 
 

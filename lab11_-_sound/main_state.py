@@ -20,8 +20,8 @@ def create_world():
     global boy, grass, balls, big_balls
 
     boy = Boy()
-    big_balls = [BigBall() for i in range(10)]
-    balls = [Ball() for i in range(10)]
+    big_balls = [BigBall() for i in range(1000)]
+    balls = [Ball() for i in range(1000)]
     balls = big_balls + balls
     grass = Grass()
 

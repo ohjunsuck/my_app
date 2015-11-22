@@ -1,35 +1,191 @@
 from pico2d import *
 import random
 import json
-import game_framework
-import title_state
 
 running = True
 score = 0
 time =10
-stage=0
+turn =0
 Object_List = []
 
 # Object Type
 BALANCE, ATTACK, DEFENSE, ITEM = 0, 1, 2, 3
-class StartMenu:
-    def __init__(self , w, h):
-        pass
-        #self.image = load_image('./resouce/타이틀.png')
-    def draw(self):
-        self.image.draw(640,320)
+SHOT, BLOOD = 0, 1
+BALANCE, ATTACK, DEFENSE, BOSS, ITEM = 0, 1, 2, 3, 4 # Object
+HAND, MACHINE, O_SNIPER, REPAIR = 5, 6, 7 ,8 # Our
+def Find_Target(x, y, rangeX, Object_List):
+    Cx = 3580
+    Target_Object = None
 
+    for object in Object_List:
+        if object.Type != ITEM:
+            if object.x - x <= rangeX:
+                if object.x < Cx and object.state != object.DIE:
+                    if object.y>=y-30-((object.x - x) / object.x * 1000) and\
+                       object.y<=y+30+((object.x - x) / object.x * 1000) :
+                        Cx = object.x
+                        Target_Object = object
+
+    if Target_Object != None:
+        return Target_Object
+    else:
+        return None
+class Hand:
+    ATTACK, SEARCH, COOLDOWN = 0, 1, 2
+    image = None
+    ATK_Upgrade = 0
+    Type = HAND
+
+    def __init__(self):
+        if Hand.image == None:
+            Hand.image = load_image('./resource/Our_Hand.png')
+        self.state = self.SEARCH
+        self.x = 0
+        self.y = 0
+
+        self.frame = 0
+
+        self.total_frame = 0.0
+        self.ATK = 0
+
+        self.Target = None
+        self.range = 0
+
+        self.cooltime = 0
+
+
+
+    def Search(self, Object_List):
+        self.Target = Find_Target(self.x, self.y, self.range, Object_List)
+        if ( self.Target != None ):
+            self.state = self.ATTACK
+
+    TIME_PER_ACTION_ATTACK = 0.2 # 1 Action Time
+    ACTION_PER_TIME_ATTACK = 1.0 / TIME_PER_ACTION_ATTACK # 1 Sec Total Action
+    TOTAL_FRAMES_ATTACK = 4
+
+    def Cool_Down(self, frame_time):
+        if self.total_frame >= self.cooltime:
+            self.state = self.SEARCH
+
+        self.total_frame += frame_time
+
+    def Attack(self, frame_time, Effect_List):
+        self.total_frame += frame_time * self.ACTION_PER_TIME_ATTACK * self.TOTAL_FRAMES_ATTACK
+        self.frame = int(self.total_frame)%self.TOTAL_FRAMES_ATTACK
+
+        if self.frame == 2 and self.Target != None:
+            self.Target.HP -= self.ATK
+            Create_Object.Create_System_Font(self.Target.x, self.Target.y, '%d' % self.ATK, (255, 1, 0))
+            if self.Target.Type == DEFENSE:
+                Create_Object.Create_Effect(BLOOD, self.Target.x-30, self.Target.y+30, Effect_List)
+            elif self.Target.Type == BOSS:
+                Create_Object.Create_Effect(SHOT, self.Target.x-30, self.Target.y+75, Effect_List)
+            else:
+                Create_Object.Create_Effect(BLOOD, self.Target.x, self.Target.y, Effect_List)
+            Check_Die.Die(self.Target)
+            self.Target = None
+        if self.frame == 0 and self.Target == None:
+            self.total_frame = 0
+            self.state = self.COOLDOWN
+
+    def update(self, frame_time, Object_List, Effect_List):
+        if self.state == self.ATTACK:
+            self.Attack(frame_time, Effect_List)
+        elif self.state == self.SEARCH:
+            self.Search(Object_List)
+        elif self.state == self.COOLDOWN:
+            self.Cool_Down(frame_time)
+
+    def draw(self):
+        self.image.clip_draw(self.frame * 48, 0, 48, 48, self.x - self.bg.left, self.y)
+
+class Machine:
+    ATTACK, SEARCH, COOLDOWN = 0, 1, 2
+    image = None
+    shot_image = None
+    ATK_Upgrade = 0
+    Type = MACHINE
+
+    def __init__(self):
+        if Machine.image == None:
+            Machine.image = load_image('./resource/Our_Machine.png')
+        if Machine.shot_image == None:
+            Machine.shot_image = load_image('./resource/Shot.png')
+        self.state = self.SEARCH
+        self.x = 0
+        self.y = 0
+
+        #self.bg = Stage.Get_Backgroud()
+
+        self.frame = 0
+        self.total_frame = 0.0
+        self.ATK = 0
+
+        self.Target = None
+        self.range = 0
+
+        self.cooltime = 0
+
+    def Reset():
+        Machine.ATK_Upgrade = 0
+
+    def Search(self, Object_List):
+        self.Target = Find_Target(self.x, self.y, self.range, Object_List)
+        if ( self.Target != None ):
+            self.state = self.ATTACK
+
+    TIME_PER_ACTION_ATTACK = 0.1 # 1 Action Time
+    ACTION_PER_TIME_ATTACK = 1.0 / TIME_PER_ACTION_ATTACK # 1 Sec Total Action
+    TOTAL_FRAMES_ATTACK = 4
+
+    def Cool_Down(self, frame_time):
+        if self.total_frame >= self.cooltime:
+            self.state = self.SEARCH
+
+        self.total_frame += frame_time
+
+    def Attack(self, frame_time, Effect_List):
+        self.total_frame += frame_time * self.ACTION_PER_TIME_ATTACK * self.TOTAL_FRAMES_ATTACK
+        self.frame = int(self.total_frame)%self.TOTAL_FRAMES_ATTACK
+
+        if self.frame == 2 and self.Target != None:
+            self.Target.HP -= self.ATK
+            Create_Object.Create_System_Font(self.Target.x, self.Target.y, '%d' % self.ATK, (255, 1, 0))
+            if self.Target.Type == DEFENSE:
+                Create_Object.Create_Effect(BLOOD, self.Target.x-30, self.Target.y+30, Effect_List)
+            elif self.Target.Type == BOSS:
+                Create_Object.Create_Effect(SHOT, self.Target.x-30, self.Target.y+75, Effect_List)
+            else:
+                Create_Object.Create_Effect(BLOOD, self.Target.x, self.Target.y, Effect_List)
+            Check_Die.Die(self.Target)
+            self.Target = None
+        if self.frame == 0 and self.Target == None:
+            self.total_frame = 0
+            self.state = self.COOLDOWN
+
+    def update(self, frame_time, Object_List, Effect_List):
+        if self.state == self.ATTACK:
+            self.Attack(frame_time, Effect_List)
+        elif self.state == self.SEARCH:
+            self.Search(Object_List)
+        elif self.state == self.COOLDOWN:
+            self.Cool_Down(frame_time)
+
+    def draw(self):
+        self.image.clip_draw(self.frame * 72, 0, 72, 48, self.x - self.bg.left, self.y)
+        if self.state == self.ATTACK:
+            self.shot_image.clip_draw(self.frame* 20, 0, 20, 27, self.x+38 - self.bg.left, self.y+6)
 class BackGround:
     PIXEL_PER_METER = (10.0 / 0.3)           # 10 pixel 30 cm
     SCROLL_SPEED_KMPH = 20.0                    # Km / Hour
     SCROLL_SPEED_MPM = (SCROLL_SPEED_KMPH * 1000.0 / 60.0)
     SCROLL_SPEED_MPS = (SCROLL_SPEED_MPM / 60.0)
     SCROLL_SPEED_PPS = (SCROLL_SPEED_MPS * PIXEL_PER_METER)
-    move=0
 
     def __init__(self, w, h):
-        self.image = load_image('./resource/BackGround.png')
-        self.image1 = load_image('./resource/구매창.png')
+        self.image = load_image('BackGround.png')
+        self.image1 = load_image('구매창.png')
         self.speed = 0
         self.left = 0
         self.screen_width = w
@@ -49,23 +205,24 @@ class BackGround:
         self.image1.draw(550,605)
 
     def update(self):
-        global turn
+        #self.left-=1
+
         pass
 
 
 
     def First(self):
-        self.image = load_image('./resource/BackGround.png')
+        self.image = load_image('BackGround.png')
 
 class User_Interface:
     def __init__(self):
-        self.gume = load_image('./resource/구매식물.png')
-        self.Num_image = load_image('./resource/Number.png')
-        self.Num_image1 = load_image('./resource/Number1.png')
-        self.Num_image2 = load_image('./resource/Time_Slot.png')
-        self.OverTime = load_image('./resource/Number2.png')
-        self.Slot = load_image('./resource/Slot.png')
-        self.Out_Slot = load_image('./resource/Out_Slot.png')
+        self.gume = load_image('구매식물.png')
+        self.Num_image = load_image('Number.png')
+        self.Num_image1 = load_image('Number1.png')
+        self.Num_image2 = load_image('Time_Slot.png')
+        self.OverTime = load_image('Number2.png')
+        self.Slot = load_image('Slot.png')
+        self.Out_Slot = load_image('Out_Slot.png')
         self.num_place = 0
         self.num_place1 = 0
         self.num_place2 = 0
@@ -211,7 +368,7 @@ class Aim:
     HAND_GUN, MACHINE_GUN, SHOT_GUN = 0, 1, 2
 
     def __init__(self):
-        self.image = load_image('./resource/Pointer.png')
+        self.image = load_image('Pointer.png')
         self.x = -100
         self.y = -100
         self.ATK = 50
@@ -259,119 +416,32 @@ class Aim:
 class Barricade:
     Wallx = 300
     Wally = 390
-    HP=25
-    HP1=50
-    HP2=75
-    HP3=100
-    HP4=125
+    HP=25000
     First_HP=HP
-    First_HP1=HP1
-    First_HP2=HP2
-    First_HP3=HP3
-    First_HP4=HP4
+    global turn
 
     def __init__(self):
-        self.image = load_image('./resource/tree01.png')
-        self.image1 = load_image('./resource/tree1.png')
-        self.image2 = load_image('./resource/tree2.png')
-        self.image3 = load_image('./resource/tree3.png')
-        self.image4 = load_image('./resource/tree4.png')
-        self.HP_image = load_image('./resource/HP.png')
-        self.explosion = load_image('./resource/Explosion.png')
-        self.frame=0
-        self.time=0
-        self.time1=0
-        self.time2=0
-        self.time3=0
-        self.time4=0
-
-        self.stage=0
+        self.image = load_image('tree01.png')
+        self.image1 = load_image('tree1.png')
+        self.image2 = load_image('tree2.png')
+        self.image3 = load_image('tree3.png')
+        self.image4 = load_image('tree4.png')
+        self.HP_image = load_image('HP.png')
 
 
     def update(self):
         global running
-        global stage
-        if(self.time<20):
-            if(Barricade.HP>0):
-                self.image.clip_draw( 0, 0, 100, 150, 150, 150)
-            else:
-                self.time+=1
-                self.frame+=1
-                self.explosion.clip_draw(self.frame * 100, 350, 100, 300, 150,150)
-                if(self.frame>4):
-                    self.frame=0
-        else:
-            stage=1
-            if(self.time1<20):
-                if(stage==1):
-                    if(Barricade.HP1>0):
-                        self.image1.clip_draw( 0, 0, 100, 150, 150, 150)
-                    else:
-                        self.time1+=1
-                        self.frame+=1
-                        self.explosion.clip_draw(self.frame * 100, 350, 100, 300, 150,150)
-                        if(self.frame>4):
-                            self.frame=0
-            else:
-                stage=2
-                if(self.time2<20):
-                    if(stage==2):
-                        if(Barricade.HP2>0):
-                            self.image2.clip_draw( 0, 0, 100, 150, 150, 150)
-                        else:
-                            self.time2+=1
-                            self.frame+=1
-                            self.explosion.clip_draw(self.frame * 100, 350, 100, 300, 150,150)
-                            if(self.frame>4):
-                                self.frame=0
-                else:
-                    stage=3
-                    if(self.time3<20):
-                        if(stage==3):
-                            if(Barricade.HP3>0):
-                                self.image3.clip_draw( 0, 0, 100, 250, 130, 180)
-                            else:
-                                self.time3+=1
-                                self.frame+=1
-                                self.explosion.clip_draw(self.frame * 100, 350, 100, 300, 150,150)
-                                if(self.frame>4):
-                                    self.frame=0
-                    else:
-                        stage=4
-                        if(self.time4<20):
-                            if(stage==4):
-                                if(Barricade.HP4>0):
-                                    self.image4.clip_draw( 0, 0, 150, 350, 120, 230)
-                                else:
-                                    self.time4+=1
-                                    self.frame+=1
-                                    self.explosion.clip_draw(self.frame * 100, 255, 100, 100, 150,150)
-                                    if(self.frame>4):
-                                        self.frame=0
-
-
-
-
-    def die(self):
-        pass
+        if(Barricade.HP<0):
+            turn=1
+            Barricade.Hp=25000
 
 
         #if self.HP < 0:
             #running = False
 
     def draw(self):
+        self.image.clip_draw( 0, 0, 100, 150, 150, 150)
         self.HP_image.clip_draw( (round( (Barricade.HP / Barricade.First_HP * 5) ) ) * 48, 0, 48, 6, 150, 250)
-        if(stage==1):
-            self.HP_image.clip_draw( (round( (Barricade.HP1 / Barricade.First_HP1 * 5) ) ) * 48, 0, 48, 6, 150, 250)
-        elif(stage==2):
-            self.HP_image.clip_draw( (round( (Barricade.HP2 / Barricade.First_HP2 * 5) ) ) * 48, 0, 48, 6, 150, 250)
-        elif(stage==3):
-            self.HP_image.clip_draw( (round( (Barricade.HP3 / Barricade.First_HP3 * 5) ) ) * 48, 0, 48, 6, 150, 250)
-        elif(stage==4):
-            self.HP_image.clip_draw( (round( (Barricade.HP4 / Barricade.First_HP4 * 5) ) ) * 48, 0, 48, 6, 150, 250)
-
-
-
 
 
 class Item:
@@ -380,7 +450,7 @@ class Item:
 
     def __init__(self):
         if Item.image == None:
-            Item.image = load_image('./resource/Item.png')
+            Item.image = load_image('Item.png')
         self.x = 1360
         self.y = random.randint(50, 250)
         self.frame = 0
@@ -409,9 +479,9 @@ class Balance_Enemy: # Slime
 
     def __init__(self):
         if Balance_Enemy.image == None:
-            Balance_Enemy.image = load_image('./resource/좀비1.png')
+            Balance_Enemy.image = load_image('좀비1.png')
         if Balance_Enemy.HP_image == None:
-            Balance_Enemy.HP_image = load_image('./resource/HP.png')
+            Balance_Enemy.HP_image = load_image('HP.png')
         self.x = random.randint(1350, 1400)
         self.y = random.randint(40, 250)
         self.HP = 250 + Balance_Enemy.HP_Upgrade
@@ -423,39 +493,26 @@ class Balance_Enemy: # Slime
         self.ATK = 10 + Balance_Enemy.ATK_Upgrade
 
     def Move(self):
-        global turn
         if self.Timer%10 == 0:
             self.frame = (self.frame+1)%4
 
         if self.Timer == 20:
-            self.x = self.x-25
+            self.x = self.x-250
             self.Timer = 0
             if self.x <= (Barricade.Wallx - ( (Barricade.Wally - self.y) / 5.5 ) ):
                 self.frame = 0
                 self.state = self.ATTACK
                 self.Timer = 0
 
-
         self.Timer += 1
 
     def Attack(self):
+        Barricade.HP -= self.ATK
         if ( self.frame != 0 ) and ( self.Timer % 5 == 0 ):
             self.frame = (self.frame+1) % 4
-            Barricade.HP -= self.ATK
-            if(stage==1):
-                Barricade.HP1 -= self.ATK
-            elif(stage==2):
-                Barricade.HP2 -= self.ATK
-            elif(stage==3):
-                Barricade.HP3 -= self.ATK
-            elif(stage==4):
-                Barricade.HP4 -= self.ATK
-
-
         elif self.Timer % 250 == 0:
             self.Timer = 0
             self.frame = (self.frame+1) % 4
-
 
 
         self.Timer += 1
@@ -496,7 +553,7 @@ class Attack_Enemy: # Snake
 
     def __init__(self):
         if Attack_Enemy.image == None:
-            Attack_Enemy.image = load_image('./resource/LEnemy-Attack.png')
+            Attack_Enemy.image = load_image('LEnemy-Attack.png')
         self.x = 1360
         self.y = random.randint(40, 250)
         self.HP = 100 + Attack_Enemy.Upgrade
@@ -531,7 +588,7 @@ class Defense_Enemy: # Golem
 
     def __init__(self):
         if Defense_Enemy.image == None:
-            Defense_Enemy.image = load_image('./resource/LEnemy-Defense.png')
+            Defense_Enemy.image = load_image('LEnemy-Defense.png')
         self.x = 1360
         self.y = random.randint(40, 250)
         self.HP = 500 + Defense_Enemy.Upgrade
@@ -572,7 +629,7 @@ def handle_events(aim, Object_List):
         elif event.type == SDL_MOUSEMOTION:
             aim.handle_events(event)
         elif event.type == SDL_MOUSEBUTTONDOWN and event.button == SDL_BUTTON_LEFT:
-            aim.Attack(event.x, 640-event.y, Object_List)
+            Hand.Attack(event.x, 640-event.y, Object_List)
         elif event.type == SDL_KEYDOWN and event.key == SDLK_r:
             Create_Object(BALANCE)
             if aim.avail_reload == True:
@@ -653,12 +710,6 @@ class Create_Enemy_Timer():
             self.Balance_Enemy_Timer = 0
         self.Balance_Enemy_Timer+=1
 
-    def Create_Baricade(self, List):
-        if self.Barricade_Timer == 100 - self.B_E_Decrease_Time:
-            Create_Object(Barricade)
-            self.Barricade_Timer = 0
-        self.Barricade_Timer+=1
-
     def Decrease_Timer_Balance(self):
         if self.B_E_Decrease_Timer == 10000:
             Balance_Enemy.ATK_Upgrade+= 5
@@ -672,14 +723,12 @@ class Create_Enemy_Timer():
         self.Create_Enemy(List)
         self.Decrease_Create_Timer()
 
-
 def main():
     open_canvas(1280, 640)
     global running
     global score
     global time
 
-    start= StartMenu(1300,650)
     bg = BackGround(1300,650)
     barricade = Barricade()
     aim = Aim()
