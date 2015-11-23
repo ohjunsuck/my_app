@@ -11,7 +11,7 @@ class Grass:
         self.w = self.image.w
         self.h = self.image.h
         #self.bgm.set_volume(64)
-        #self.bgm.repeat_play()
+        self.bgm.repeat_play()
     def set_center_object(self, boy):
         self.center_object = boy
         # fill here
