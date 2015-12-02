@@ -13,3 +13,33 @@ Traceback (most recent call last):
   File "C:\Users\ohjunseok\Documents\workspace\myapp\my_app\3차준비프레임워크1\main_state.py", line 1982, in Create_Object
     Object_Data_File = open('./resource/object_data.txt', 'r')
 FileNotFoundError: [Errno 2] No such file or directory: './resource/object_data.txt'
+Traceback (most recent call last):
+  File "mygame.py", line 15, in <module>
+  File "C:\Users\ohjunseok\Documents\workspace\myapp\my_app\3차준비프레임워크1\game_framework.py", line 88, in run
+    stack[-1].update()
+  File "C:\Users\ohjunseok\Documents\workspace\myapp\my_app\3차준비프레임워크1\main_state.py", line 2131, in update
+    create_enemy_timer.update(Object_List)
+  File "C:\Users\ohjunseok\Documents\workspace\myapp\my_app\3차준비프레임워크1\main_state.py", line 2052, in update
+    self.Create_Enemy(List)
+  File "C:\Users\ohjunseok\Documents\workspace\myapp\my_app\3차준비프레임워크1\main_state.py", line 2022, in Create_Enemy
+    self.Create_Balance_Enemy(List)
+  File "C:\Users\ohjunseok\Documents\workspace\myapp\my_app\3차준비프레임워크1\main_state.py", line 2030, in Create_Balance_Enemy
+    Create_Object(BALANCE)
+  File "C:\Users\ohjunseok\Documents\workspace\myapp\my_app\3차준비프레임워크1\main_state.py", line 1982, in Create_Object
+    Object_Data_File = open('./resource/object_data.txt', 'r')
+FileNotFoundError: [Errno 2] No such file or directory: './resource/object_data.txt'
+Traceback (most recent call last):
+  File "mygame.py", line 15, in <module>
+  File "C:\Users\ohjunseok\Documents\workspace\myapp\my_app\3차준비프레임워크1\game_framework.py", line 88, in run
+    stack[-1].update()
+  File "C:\Users\ohjunseok\Documents\workspace\myapp\my_app\3차준비프레임워크1\main_state.py", line 2131, in update
+    create_enemy_timer.update(Object_List)
+  File "C:\Users\ohjunseok\Documents\workspace\myapp\my_app\3차준비프레임워크1\main_state.py", line 2052, in update
+    self.Create_Enemy(List)
+  File "C:\Users\ohjunseok\Documents\workspace\myapp\my_app\3차준비프레임워크1\main_state.py", line 2022, in Create_Enemy
+    self.Create_Balance_Enemy(List)
+  File "C:\Users\ohjunseok\Documents\workspace\myapp\my_app\3차준비프레임워크1\main_state.py", line 2030, in Create_Balance_Enemy
+    Create_Object(BALANCE)
+  File "C:\Users\ohjunseok\Documents\workspace\myapp\my_app\3차준비프레임워크1\main_state.py", line 1982, in Create_Object
+    Object_Data_File = open('./resource/object_data.txt', 'r')
+FileNotFoundError: [Errno 2] No such file or directory: './resource/object_data.txt'
