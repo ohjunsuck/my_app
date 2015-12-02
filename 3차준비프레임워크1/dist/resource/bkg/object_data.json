@@ -1,0 +1,26 @@
+{
+    "BALANCE" : {"State":"MOVE", "x":1350, "y":30, "HP":150, "ATK":15 },
+    "ATTACK": {"State":"MOVE", "x":1350, "y":30, "HP":100, "ATK":30 },	
+    "DEFENSE": {"State":"MOVE", "x":1350, "y":30, "HP":750, "ATK":100 },
+    "BOSS": {"State":"MOVE", "x":1350, "y":30, "HP":2500, "ATK":300 },
+	
+    "HAND" : {"State" : "SEARCH","ATK":25, "RANGE" :450, "COOLTIME" : 1.5},	
+    "MACHINE" : {"State" : "SEARCH","ATK":5, "RANGE" :500, "COOLTIME" : 0.05},
+    "O_SNIPER" : {"State" : "SEARCH","ATK":150, "RANGE" :1000, "COOLTIME" : 4},
+    "REPAIR" : {"State" : "FIX", "AMOUNT":100, "COOLTIME" : 30},
+
+    "ITEM" : {"State" : "MOVE", "x": 1350, "y":30, "HP":100 }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+

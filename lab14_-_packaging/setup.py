@@ -80,6 +80,9 @@ manifest_template = '''<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 
 
 mygame = Target(
+    script="mygame.py",
+    dest_base = "MyGame",
+    icon_resources=[(1,r"pico2d.ico")],
 
 
 
@@ -97,6 +100,15 @@ py2exe_options = dict(
 
 resources = "                       ".split()
 
+if platform.architecture()[0] == '32bit':
+    sdl_folder = './SDL2/x86/'
+else:
+    sdl_folder = './SDL2/x64/'
+
+sdl_dlls = [sdl_folder + file_name for file_name in os.listdir(sdl_folder)]
+
+resources = "animation_sheet.png \
+            ConsolaMalgun.ttf KPU_GROUND.png".split()
 if platform.architecture()[0] == '32bit':
     sdl_folder = './SDL2/x86/'
 else:
