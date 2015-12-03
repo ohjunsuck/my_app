@@ -1363,7 +1363,7 @@ class Balance_Enemy: # Slime
             Balance_Enemy.HP_image = load_image('./resource/HP.png')
         self.x = random.randint(1350, 1400)
         self.y = random.randint(40, 250)
-        self.HP = 25 + Balance_Enemy.HP_Upgrade
+        self.HP = 40 + Balance_Enemy.HP_Upgrade
         self.First_HP = self.HP
         self.frame = 0
         self.Timer = 0
@@ -1459,7 +1459,7 @@ class Balance_Enemy1: # Slime
             Balance_Enemy1.HP_image = load_image('./resource/HP.png')
         self.x = random.randint(1350, 1400)
         self.y = random.randint(40, 250)
-        self.HP = 50 + Balance_Enemy1.HP_Upgrade
+        self.HP = 60 + Balance_Enemy1.HP_Upgrade
         self.First_HP = self.HP
         self.frame = 0
         self.Timer = 0
@@ -1568,13 +1568,13 @@ class Balance_Enemy2: # Slime
         Balance_Enemy2.makesound.play()
         self.x = random.randint(1350, 1400)
         self.y = random.randint(40, 250)
-        self.HP = 5000 + Balance_Enemy1.HP_Upgrade
+        self.HP = 10000 + Balance_Enemy1.HP_Upgrade
         self.First_HP = self.HP
         self.frame = 0
         self.Timer = 0
         self.myindex = None
         self.state = self.MOVE
-        self.ATK = 100 + Balance_Enemy1.ATK_Upgrade
+        self.ATK = 200 + Balance_Enemy1.ATK_Upgrade
         self.attackstate=0
 
     def Move(self):
@@ -1685,13 +1685,13 @@ class Balance_Enemy3: # Slime
         #Balance_Enemy2.makesound.play()
         self.x = random.randint(1350, 1400)
         self.y = random.randint(40, 250)
-        self.HP = 1000 + Balance_Enemy3.HP_Upgrade
+        self.HP = 7000 + Balance_Enemy3.HP_Upgrade
         self.First_HP = self.HP
         self.frame = 0
         self.Timer = 0
         self.myindex = None
         self.state = self.MOVE
-        self.ATK = 20 + Balance_Enemy3.ATK_Upgrade
+        self.ATK = 100 + Balance_Enemy3.ATK_Upgrade
         self.attackstate=0
 
     def Move(self):
@@ -1700,7 +1700,7 @@ class Balance_Enemy3: # Slime
             self.frame = (self.frame+1)%4
 
         if self.Timer == 20:
-            self.x = self.x-20
+            self.x = self.x-15
             self.Timer = 0
             if self.x-100 <= (Barricade.Wallx - ( (Barricade.Wally - self.y) / 5.5 ) ):
                 self.frame = 0
@@ -1805,13 +1805,13 @@ class Balance_Enemy4: # Slime
         #Balance_Enemy2.makesound.play()
         self.x = random.randint(1350, 1400)
         self.y = random.randint(40, 250)
-        self.HP = 500 + Balance_Enemy4.HP_Upgrade
+        self.HP = 1000 + Balance_Enemy4.HP_Upgrade
         self.First_HP = self.HP
         self.frame = 0
         self.Timer = 0
         self.myindex = None
         self.state = self.MOVE
-        self.ATK = 5 + Balance_Enemy4.ATK_Upgrade
+        self.ATK = 30 + Balance_Enemy4.ATK_Upgrade
         self.attackstate=0
 
     def Move(self):
@@ -1820,7 +1820,7 @@ class Balance_Enemy4: # Slime
             self.frame = (self.frame+1)%7
 
         if self.Timer == 20:
-            self.x = self.x-40
+            self.x = self.x-20
             self.Timer = 0
             if self.x-300 <= (Barricade.Wallx - ( (Barricade.Wally - self.y) / 5.5 ) ):
                 self.frame = 0
@@ -1924,13 +1924,13 @@ class Balance_Enemy5: # Slime
         #Balance_Enemy2.makesound.play()
         self.x = random.randint(1350, 1400)
         self.y = random.randint(40, 250)
-        self.HP = 3000 + Balance_Enemy5.HP_Upgrade
+        self.HP = 8000 + Balance_Enemy5.HP_Upgrade
         self.First_HP = self.HP
         self.frame = 0
         self.Timer = 0
         self.myindex = None
         self.state = self.MOVE
-        self.ATK = 70 + Balance_Enemy5.ATK_Upgrade
+        self.ATK = 150 + Balance_Enemy5.ATK_Upgrade
         self.attackstate=0
 
     def Move(self):
@@ -2462,9 +2462,9 @@ def update():
             Object_List.append(Balance_Enemy3())
         if(time%1000==0):
             Object_List.append(Balance_Enemy4())
-        if(time%4000==0):
+        if(time%3500==0):
             Object_List.append(Balance_Enemy5())
-        if(time%6500==0):
+        if(time%5500==0):
             Object_List.append(Balance_Enemy2())
             sscore=0
 
