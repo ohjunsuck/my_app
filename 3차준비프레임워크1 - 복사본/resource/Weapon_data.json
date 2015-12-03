@@ -1,0 +1,19 @@
+{
+    "HAND_GUN" : {"State":"IDLE", "ATK":50, "AMMO":10, "COOLTIME":0.5, "RELOADINGTIME" : 2},
+    "ASSAULT_RIFLE" : {"State":"IDLE", "ATK":25, "AMMO":30, "COOLTIME":0.1, "RELOADINGTIME" : 3  },
+    "SHOT_GUN" : {"State":"IDLE", "ATK":15, "AMMO":8, "COOLTIME":1.0, "RELOADINGTIME" : 0.5, "ACCURACY" : 70, "SHOOTING_NUM" : 10},
+    "W_SNIPER" : {"State":"IDLE", "ATK":200, "AMMO":5, "COOLTIME":1.5, "RELOADINGTIME" : 3},
+    "BAZOOKA" : {"State":"IDLE", "ATK":1000, "AMMO":1, "COOLTIME":2.5, "RELOADINGTIME" : 5, "RANGE" : 150}
+}
+
+
+
+
+
+
+
+
+
+
+
+
