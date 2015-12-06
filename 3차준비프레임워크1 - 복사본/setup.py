@@ -83,9 +83,6 @@ mygame = Target(
     script="mygame.py",
     dest_base = "MyGame",
     icon_resources=[(1,r"pico2d.ico")],
-
-
-
     other_resources = [(RT_MANIFEST, 1, (manifest_template % dict(prog="mygame", level="asInvoker")).encode("utf-8"))]
     )
 
@@ -100,16 +97,9 @@ py2exe_options = dict(
 
 resources = "                       ".split()
 
-if platform.architecture()[0] == '32bit':
-    sdl_folder = './SDL2/x86/'
-else:
-    sdl_folder = './SDL2/x64/'
+resource = ['./resource/' + file_name for file_name in os.listdir('./resource/')]
 
-sdl_dlls = [sdl_folder + file_name for file_name in os.listdir(sdl_folder)]
 
-resource_bkg = ['./resource/' + file_name for file_name in os.listdir('./resource/')]
-resources = "animation_sheet.png \
-            ConsolaMalgun.ttf KPU_GROUND.png".split()
 if platform.architecture()[0] == '32bit':
     sdl_folder = './SDL2/x86/'
 else:
@@ -120,8 +110,7 @@ sdl_dlls = [sdl_folder + file_name for file_name in os.listdir(sdl_folder)]
 
 setup(name="name",
       windows=[mygame],
-      data_files=[('./resource/bkg/', resource_bkg), (sdl_folder, sdl_dlls)] +
-                 [('.', resources), (sdl_folder, sdl_dlls)], # copy resource to '.' folder
+      data_files=[('./resource/', resource), (sdl_folder, sdl_dlls)], # copy resource to '.' folder
       zipfile=None,
       options={"py2exe": py2exe_options},
       )

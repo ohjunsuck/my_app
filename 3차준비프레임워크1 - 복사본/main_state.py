@@ -45,6 +45,10 @@ class BackGround:
     move=0
 
     def __init__(self, w, h):
+        self.bgm1 = load_music('./resource/1탄.mp3')
+        self.bgm2 = load_music('./resource/2탄.mp3')
+        self.bgm3 = load_music('./resource/3탄.mp3')
+        self.bgm4 = load_music('./resource/4탄.mp3')
         self.image = load_image('./resource/BackGround.png')
         self.image1 = load_image('./resource/구매창.png')
         global char_image1, char_image2, char_image3, char_image4, bg_image, M_Pointer, mx, my, c_i1, c_i2, c_i3, c_i4, System_Sound1
@@ -897,26 +901,25 @@ class Aim:
                 self.avail_reload = True
                 self.reload_timer=0
                 for i in range(0, len(Object_List)):
-                    for i in range(0, len(Object_List)):
-                       for i in range(0, len(Object_List)):
-                           if Object_List[len(Object_List)-1-i].Type == BALANCE:
-                               for i in range(0, len(Object_List)):
-                                   if (Object_List[len(Object_List)-1-i].x-218 <= self.x) and \
-                                           (Object_List[len(Object_List)-1-i].x+222 >= self.x) and \
-                                           (Object_List[len(Object_List)-1-i].y-224 <= self.y) and \
-                                           (Object_List[len(Object_List)-1-i].y+207 >= self.y) and \
-                                           (Object_List[len(Object_List)-1-i].state != Object_List[len(Object_List)-1-i].DIE):
-                                       if (Object_List[len(Object_List)-1-i].x-3-self.range <= self.x) and \
-                                       (Object_List[len(Object_List)-1-i].x+3+self.range >= self.x) and \
-                                       (Object_List[len(Object_List)-1-i].y-3-self.range <= self.y) and \
-                                       (Object_List[len(Object_List)-1-i].y+7+self.range >= self.y) and \
+                   for i in range(0, len(Object_List)):
+                       if Object_List[len(Object_List)-1-i].Type == BALANCE:
+                           for i in range(0, len(Object_List)):
+                               if (Object_List[len(Object_List)-1-i].x-218 <= self.x) and \
+                                       (Object_List[len(Object_List)-1-i].x+222 >= self.x) and \
+                                       (Object_List[len(Object_List)-1-i].y-224 <= self.y) and \
+                                       (Object_List[len(Object_List)-1-i].y+207 >= self.y) and \
                                        (Object_List[len(Object_List)-1-i].state != Object_List[len(Object_List)-1-i].DIE):
-                                           self.headshotstate=1
-                                           Aim.headshot_sound.play()
-                                           Object_List[len(Object_List)-1-i].HP -= self.ATK*3
-                                       Object_List[len(Object_List)-1-i].HP -= self.ATK
-                                       Check_Die(Object_List[len(Object_List)-1-i], len(Object_List)-1-i)
-                                       break
+                                   if (Object_List[len(Object_List)-1-i].x-3-self.range <= self.x) and \
+                                   (Object_List[len(Object_List)-1-i].x+3+self.range >= self.x) and \
+                                   (Object_List[len(Object_List)-1-i].y-3-self.range <= self.y) and \
+                                   (Object_List[len(Object_List)-1-i].y+7+self.range >= self.y) and \
+                                   (Object_List[len(Object_List)-1-i].state != Object_List[len(Object_List)-1-i].DIE):
+                                       self.headshotstate=1
+                                       Aim.headshot_sound.play()
+                                       Object_List[len(Object_List)-1-i].HP -= self.ATK*3
+                                   Object_List[len(Object_List)-1-i].HP -= self.ATK
+                                   Check_Die(Object_List[len(Object_List)-1-i], len(Object_List)-1-i)
+                                   break
                 self.Ammo -= 1
             else:
                 self.avail_reload = False
@@ -934,7 +937,7 @@ class Aim:
             self.speed=99
             self.range=1
         elif(WEAPON_TYPE==3 and WEAPON_STATE==3):
-            self.ATK = 15
+            self.ATK = 20
             self.Ammo = 5
             self.reload_timer = 0
             self.speed=1
@@ -945,15 +948,15 @@ class Aim:
             self.reload_timer = 0
             self.speed=1
             self.range=5
-        elif(WEAPON_TYPE==3 and WEAPON_STATE==3):
-            self.ATK = 20
+        elif(WEAPON_TYPE==5 and WEAPON_STATE==5):
+            self.ATK = 1
             self.Ammo = 5
             self.reload_timer = 0
             self.speed=1
             self.range=10
     def Reloading(self):
         if WEAPON_TYPE==1:
-            if self.reload_timer == 100:
+            if self.reload_timer == 70:
                 self.Ammo = 10+self.hand_ammoupgrade
                 self.avail_reload = True
                 self.reload_timer = 0+self.hand_reloadupgrade
@@ -963,19 +966,19 @@ class Aim:
                 self.avail_reload = True
                 self.reload_timer = 0+self.rifle_reloadupgrade
         elif WEAPON_TYPE==3:
-            if self.reload_timer == 100:
+            if self.reload_timer == 150:
                 self.Ammo = 5+self.sniper_ammoupgrade
                 self.avail_reload = True
                 self.reload_timer = 0+self.sniper_reloadupgrade
 
         elif WEAPON_TYPE==4:
-            if self.reload_timer == 100:
+            if self.reload_timer == 120:
                 self.Ammo = 30+self.shot_ammoupgrade
                 self.avail_reload = True
                 self.reload_timer = 0+self.shot_reloadupgrade
 
         elif WEAPON_TYPE==5:
-            if self.reload_timer == 100:
+            if self.reload_timer == 200:
                 self.Ammo = 2+self.bajuca_ammoupgrade
                 self.avail_reload = True
                 self.reload_timer = 0+self.bajuca_reloadupgrade
@@ -1363,7 +1366,7 @@ class Balance_Enemy: # Slime
             Balance_Enemy.HP_image = load_image('./resource/HP.png')
         self.x = random.randint(1350, 1400)
         self.y = random.randint(40, 250)
-        self.HP = 40 + Balance_Enemy.HP_Upgrade
+        self.HP = 100 + Balance_Enemy.HP_Upgrade
         self.First_HP = self.HP
         self.frame = 0
         self.Timer = 0
@@ -1459,7 +1462,7 @@ class Balance_Enemy1: # Slime
             Balance_Enemy1.HP_image = load_image('./resource/HP.png')
         self.x = random.randint(1350, 1400)
         self.y = random.randint(40, 250)
-        self.HP = 60 + Balance_Enemy1.HP_Upgrade
+        self.HP = 150 + Balance_Enemy1.HP_Upgrade
         self.First_HP = self.HP
         self.frame = 0
         self.Timer = 0
@@ -1568,7 +1571,7 @@ class Balance_Enemy2: # Slime
         Balance_Enemy2.makesound.play()
         self.x = random.randint(1350, 1400)
         self.y = random.randint(40, 250)
-        self.HP = 10000 + Balance_Enemy1.HP_Upgrade
+        self.HP = 20000 + Balance_Enemy1.HP_Upgrade
         self.First_HP = self.HP
         self.frame = 0
         self.Timer = 0
@@ -1685,7 +1688,7 @@ class Balance_Enemy3: # Slime
         #Balance_Enemy2.makesound.play()
         self.x = random.randint(1350, 1400)
         self.y = random.randint(40, 250)
-        self.HP = 7000 + Balance_Enemy3.HP_Upgrade
+        self.HP = 15000 + Balance_Enemy3.HP_Upgrade
         self.First_HP = self.HP
         self.frame = 0
         self.Timer = 0
@@ -1805,7 +1808,7 @@ class Balance_Enemy4: # Slime
         #Balance_Enemy2.makesound.play()
         self.x = random.randint(1350, 1400)
         self.y = random.randint(40, 250)
-        self.HP = 1000 + Balance_Enemy4.HP_Upgrade
+        self.HP = 5000 + Balance_Enemy4.HP_Upgrade
         self.First_HP = self.HP
         self.frame = 0
         self.Timer = 0
@@ -1924,7 +1927,7 @@ class Balance_Enemy5: # Slime
         #Balance_Enemy2.makesound.play()
         self.x = random.randint(1350, 1400)
         self.y = random.randint(40, 250)
-        self.HP = 8000 + Balance_Enemy5.HP_Upgrade
+        self.HP = 17500 + Balance_Enemy5.HP_Upgrade
         self.First_HP = self.HP
         self.frame = 0
         self.Timer = 0
@@ -2452,21 +2455,24 @@ def update():
     hide_cursor()
     running=True
 
-
+    bg.bgm1.repeat_play()
     current_time = get_time()
     #Object_List.append(Balance_Enemy2())
     while(running):
+
         time+=1
         #if(sscore>1):
         if(time%2500==0):
+            bg.bgm2.repeat_play()
             Object_List.append(Balance_Enemy3())
         if(time%1000==0):
             Object_List.append(Balance_Enemy4())
         if(time%3500==0):
+            bg.bgm3.repeat_play()
             Object_List.append(Balance_Enemy5())
-        if(time%5500==0):
+        if(time%5000==0):
+            bg.bgm4.repeat_play()
             Object_List.append(Balance_Enemy2())
-            sscore=0
 
         if(time%500==0):
             Object_List.append(Balance_Enemy1())
